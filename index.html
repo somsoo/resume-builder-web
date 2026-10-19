@@ -7,18 +7,18 @@
 
     <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>1분 A4 표준 이력서 & 경력기술서 빌더</title>
+    <title>1분 A4 표준 이력서 빌더 | 경력기술서 작성</title>
     <meta content="회원가입 없이 즉시 작성하는 깔끔한 A4 표준 이력서. 실시간 렌더링, 서버 저장 없는 브라우저 즉시 PDF 인쇄 무료." name="description"/>
     <link href="https://resume.enjoy-onepage.com/" rel="canonical"/>
     <meta content="website" property="og:type"/>
     <meta property="og:locale" content="ko_KR">
     <meta content="https://resume.enjoy-onepage.com/" property="og:url"/>
-    <meta content="Resume Builder - 1분 A4 표준 이력서 빌더" property="og:title"/>
-    <meta content="개인정보 외부 유출 제로! 브라우저에서 바로 작성하고 A4 PDF로 즉시 인쇄하는 이력서 빌더입니다." property="og:description"/>
+    <meta content="1분 A4 표준 이력서 빌더 | 경력기술서 작성" property="og:title"/>
+    <meta content="회원가입 없이 즉시 작성하는 깔끔한 A4 표준 이력서. 실시간 렌더링, 서버 저장 없는 브라우저 즉시 PDF 인쇄 무료." property="og:description"/>
     <meta content="https://resume.enjoy-onepage.com/og-image.png" property="og:image"/>
     <meta content="summary_large_image" name="twitter:card"/>
-    <meta content="Resume Builder - 1분 A4 표준 이력서 빌더" name="twitter:title"/>
-    <meta content="개인정보 외부 유출 제로! 브라우저에서 바로 작성하고 A4 PDF로 즉시 인쇄하는 이력서 빌더입니다." name="twitter:description"/>
+    <meta content="1분 A4 표준 이력서 빌더 | 경력기술서 작성" name="twitter:title"/>
+    <meta content="회원가입 없이 즉시 작성하는 깔끔한 A4 표준 이력서. 실시간 렌더링, 서버 저장 없는 브라우저 즉시 PDF 인쇄 무료." name="twitter:description"/>
     <meta content="https://resume.enjoy-onepage.com/og-image.png" name="twitter:image"/>
     <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
 
@@ -400,6 +400,12 @@ class="manual-ad-box ad-bottom-banner" style="width: 100%; max-width: 960px; mar
             skills: 'JavaScript, TypeScript, React, Next.js, Tailwind CSS'
         };
 
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+
         function showToast(msg) {
             const toast = document.getElementById('toastNotification');
             const toastMsg = document.getElementById('toastMessage');
@@ -411,15 +417,15 @@ class="manual-ad-box ad-bottom-banner" style="width: 100%; max-width: 960px; mar
         }
 
         function renderPreview() {
-            document.getElementById('prevName').innerText = resume.name || '성명 미입력';
-            document.getElementById('prevRole').innerText = resume.role || '';
+            document.getElementById('prevName').textContent = resume.name || '성명 미입력';
+            document.getElementById('prevRole').textContent = resume.role || '';
             document.getElementById('prevContact').innerHTML = `
-                <span><i class="fa-solid fa-envelope mr-1"></i>${resume.email}</span>
-                <span><i class="fa-solid fa-phone mr-1"></i>${resume.phone}</span>
+                <span><i class="fa-solid fa-envelope mr-1"></i>${escapeHtml(resume.email)}</span>
+                <span><i class="fa-solid fa-phone mr-1"></i>${escapeHtml(resume.phone)}</span>
             `;
-            document.getElementById('prevSummary').innerText = resume.summary || '';
-            document.getElementById('prevExp').innerText = resume.experience || '';
-            document.getElementById('prevSkills').innerText = resume.skills || '';
+            document.getElementById('prevSummary').textContent = resume.summary || '';
+            document.getElementById('prevExp').textContent = resume.experience || '';
+            document.getElementById('prevSkills').textContent = resume.skills || '';
         }
 
         function loadData() {
