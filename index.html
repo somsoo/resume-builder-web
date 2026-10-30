@@ -206,6 +206,14 @@
                         <textarea id="userExperience" rows="3" class="w-full text-base sm:text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-700 font-medium text-slate-900 resize-none" aria-label="경력 사항">• (주)테크솔루션 | 웹 프론트엔드 리드 (2023.03 ~ 현재)&#10;  - 신규 SaaS 플랫폼 프론트엔드 아키텍처 설계&#10;  - 로딩 속도 40% 개선 및 월간 사용자 50만 달성&#10;• 스타트업 랩 | 주니어 개발자 (2021.06 ~ 2023.02)</textarea>
                     </div>
                     <div>
+                        <label for="userEducation" class="block text-xs font-bold text-slate-700 mb-1">학력 (최종 학력부터)</label>
+                        <textarea id="userEducation" rows="2" class="w-full text-base sm:text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-700 font-medium text-slate-900 resize-none" aria-label="학력">• 한국대학교 컴퓨터공학과 졸업 (2017.03 ~ 2021.02)</textarea>
+                    </div>
+                    <div>
+                        <label for="userCerts" class="block text-xs font-bold text-slate-700 mb-1">자격증 · 어학 (취득일 포함)</label>
+                        <textarea id="userCerts" rows="2" class="w-full text-base sm:text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-700 font-medium text-slate-900 resize-none" aria-label="자격증">• 정보처리기사 (2020.11)&#10;• TOEIC 900 (2024.05)</textarea>
+                    </div>
+                    <div>
                         <label for="userSkills" class="block text-xs font-bold text-slate-700 mb-1">보유 기술 스택</label>
                         <input type="text" id="userSkills" value="JavaScript, TypeScript, React, Next.js, Tailwind CSS, Git" class="w-full text-base sm:text-sm px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-700 font-medium text-slate-900" aria-label="기술 스택">
                     </div>
@@ -235,6 +243,18 @@
                     <div>
                         <h3 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">WORK EXPERIENCE</h3>
                         <div class="text-xs text-slate-700 whitespace-pre-line leading-relaxed font-sans" id="prevExp">경력 내용</div>
+                    </div>
+
+                    <!-- Education -->
+                    <div id="prevEduBox">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">EDUCATION</h3>
+                        <div class="text-xs text-slate-700 whitespace-pre-line leading-relaxed font-sans" id="prevEdu"></div>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div id="prevCertsBox">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">CERTIFICATIONS</h3>
+                        <div class="text-xs text-slate-700 whitespace-pre-line leading-relaxed font-sans" id="prevCerts"></div>
                     </div>
 
                     <!-- Skills -->
@@ -270,7 +290,7 @@
             A4 이력서와 경력기술서, 이렇게 쓰세요
           </h3>
           <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            이 빌더는 인적사항, 한 줄 소개, 경력, 기술을 A4 한 장에 담는 자유 양식입니다. 회사가 정한 양식이 있으면 그 양식을 쓰세요. 학력·자격증 칸은 따로 없으니 경력 칸에 함께 적으세요.
+            이 빌더는 인적사항, 한 줄 소개, 경력, 학력, 자격증, 기술을 A4 한 장에 담는 자유 양식입니다. 회사가 정한 양식이 있으면 그 양식을 쓰세요. 학력·자격증 칸을 비우면 미리보기와 인쇄에서 그 항목이 빠집니다.
           </p>
         </div>
 
@@ -386,8 +406,12 @@
             phone: '010-1234-5678',
             summary: '사용자 중심의 가치를 코드로 구현하는 3년 차 개발자입니다.',
             experience: '• (주)테크솔루션 | 웹 프론트엔드 리드 (2023.03 ~ 현재)\n  - 신규 SaaS 플랫폼 프론트엔드 아키텍처 설계',
+            education: '• 한국대학교 컴퓨터공학과 졸업 (2017.03 ~ 2021.02)',
+            certs: '• 정보처리기사 (2020.11)\n• TOEIC 900 (2024.05)',
             skills: 'JavaScript, TypeScript, React, Next.js, Tailwind CSS'
         };
+        const FIELDS = { userName: 'name', userRole: 'role', userEmail: 'email', userPhone: 'phone', userSummary: 'summary',
+                         userExperience: 'experience', userEducation: 'education', userCerts: 'certs', userSkills: 'skills' };
 
         function escapeHtml(str) {
             return String(str || '').replace(/[&<>"']/g, m => ({
@@ -415,38 +439,35 @@
             document.getElementById('prevSummary').textContent = resume.summary || '';
             document.getElementById('prevExp').textContent = resume.experience || '';
             document.getElementById('prevSkills').textContent = resume.skills || '';
+            [['education', 'prevEdu'], ['certs', 'prevCerts']].forEach(([key, id]) => {
+                const text = (resume[key] || '').trim();
+                document.getElementById(id).textContent = text;
+                document.getElementById(id + 'Box').style.display = text ? '' : 'none';
+            });
         }
 
         function loadData() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) resume = JSON.parse(raw);
-                document.getElementById('userName').value = resume.name || '';
-                document.getElementById('userRole').value = resume.role || '';
-                document.getElementById('userEmail').value = resume.email || '';
-                document.getElementById('userPhone').value = resume.phone || '';
-                document.getElementById('userSummary').value = resume.summary || '';
-                document.getElementById('userExperience').value = resume.experience || '';
-                document.getElementById('userSkills').value = resume.skills || '';
+                if (raw) {
+                    const saved = JSON.parse(raw);
+                    // 예전에 저장한 이력서에는 학력·자격증이 없으므로 예시 문구 대신 빈칸으로 둔다
+                    resume = Object.assign({ education: '', certs: '' }, saved);
+                }
+                Object.entries(FIELDS).forEach(([id, key]) => { document.getElementById(id).value = resume[key] || ''; });
             } catch(e) {}
             renderPreview();
         }
 
         function saveData() {
-            resume.name = document.getElementById('userName').value;
-            resume.role = document.getElementById('userRole').value;
-            resume.email = document.getElementById('userEmail').value;
-            resume.phone = document.getElementById('userPhone').value;
-            resume.summary = document.getElementById('userSummary').value;
-            resume.experience = document.getElementById('userExperience').value;
-            resume.skills = document.getElementById('userSkills').value;
+            Object.entries(FIELDS).forEach(([id, key]) => { resume[key] = document.getElementById(id).value; });
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(resume));
             } catch(e) {}
             renderPreview();
         }
 
-        ['userName', 'userRole', 'userEmail', 'userPhone', 'userSummary', 'userExperience', 'userSkills'].forEach(id => {
+        Object.keys(FIELDS).forEach(id => {
             document.getElementById(id).addEventListener('input', saveData);
         });
 
@@ -463,7 +484,7 @@
   </div>
   <script>
     function copyMasterResult() {
-      var resEl = document.getElementById('result') || document.getElementById('resultCard') || document.querySelector('.result-box') || document.querySelector('main');
+      var resEl = document.getElementById('resumePreviewCard') || document.querySelector('main');
       var text = resEl ? (resEl.innerText || resEl.textContent) : '1분 A4 표준 이력서 & 경력기술서 빌더 계산 결과';
       var shareText = text.trim() + "\n\n👉 1분 A4 표준 이력서 & 경력기술서 빌더 바로가기: " + window.location.href;
       if (navigator.clipboard) {
