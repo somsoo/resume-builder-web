@@ -86,6 +86,7 @@
       input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid #2563eb !important; outline-offset: 1px !important; }
       @media print {
         header, footer, .ad-top-banner, .ad-bottom-banner, #editorPanel, #guideSection, #toastNotification { display: none !important; }
+        body > *:not(main), main > :not(.grid) { display: none !important; } /* 인쇄에는 이력서 카드만 */
         body { background: white !important; padding: 0 !important; }
         #resumePreviewCard { border: none !important; box-shadow: none !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
         #prevPhoto { width: 3cm !important; height: 4cm !important; }
